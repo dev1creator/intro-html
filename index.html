@@ -1,48 +1,137 @@
 <html>
-  
-  <head>
-    <title>Dev1Creator</title>
-     <link rel="stylesheet" href="style.css">
-  </head>
-  
-  <h1>Hi there!</h1>
-  
-  <body>
-    
-    <h2>Welcome, user!</h2>
-  
-  <ul>
-    <li><a href="https://www.instagram.com/">
-         <img alt="Instagram" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1200px-Instagram_logo_2016.svg.png"></li>
-      </a>
-   <li> <a href="https://www.surveymonkey.com/">
-         <img alt="Survey" src="https://harmonypublicschools.network/hsthouston-new/wp-content/uploads/sites/109/2020/10/take-the-survey.png"
-                                                                                            width=150" height="150"></a></li>
-</ul> 
-  
-  <li><a href="https://github.com">This is a link to GitHub!</a></li>
-
-<form>
-  <table>
-    <ul>
-      <li><label for="name">Name:</label>
-        <input type="text" name="username" id="username"></li>
-  <li> <label for="user-pwd">Password:</label>
-    <input type="password" name="user-password" id="user-pwd"></li>
-                                                             <li><label>Genre:</label></li>
-    <li><input type="radio" name="gender" id="male">
-    <label for="male">Male</label>
-    <input type="radio" name="gender" id="female">
-    <label for="female">Female</label></li>
-   <li><label for="file-select">Upload:</label>
-     <input type="file" name="upload" id="file-select"></li>
-   <li><label for="description">Description:</label>
-     <textarea rows="3" cols="30" name="description" id="description"></textarea></li>
-   <li><input type="submit" value="Submit">
-     <input type="reset" value="Reset"></li>
-    </ul>
-  </table>
+<head>
+<style>
+body {
+background-color: blue;
+}
+h1 {
+color: white;
+text-align: center;
+}
+input {
+width: 80%;
+margin: 10px auto;
+display: block;
+}
+button {
+width: 20%;
+margin: 10px auto;
+display: block;
+border-radius: 10px;
+background-color: green;
+color: white;
+}
+</style>
+</head>
+<body>
+<h1>BOE Finder</h1>
+<form id="form">
+<input type="text" id="keyword" placeholder="Introduce la palabra clave para buscar">
+<button type="submit" id="search">Buscar</button>
 </form>
-  
+<div id="results"></div>
+<script>
+// Get the elements from the document
+var form = document.getElementById("form");
+var keyword = document.getElementById("keyword");
+var search = document.getElementById("search");
+var results = document.getElementById("results");
+
+```
+// Add an event listener to the form
+form.addEventListener("submit", function(event) {
+  // Prevent the default action of the form
+  event.preventDefault();
+  // Clear the previous results
+  results.innerHTML = "";
+  // Get the value of the keyword input
+  var query = keyword.value;
+  // Check if the query is not empty
+  if (query) {
+    // Encode the query for the URL
+    var encodedQuery = encodeURIComponent(query);
+    // Construct the URL for the BOE API
+    var url = "<https://boe.es/buscar/legislacion.php?accion=Buscar&operador=and&ordenacion=FechaBOE&formato=json&campo%5B0%5D=DOC&dato%5B0%5D=>" + encodedQuery;
+    // Fetch the data from the URL
+    fetch(url)
+      .then(function(response) {
+        // Check if the response is ok
+        if (response.ok) {
+          // Return the response as JSON
+          return response.json();
+        } else {
+          // Throw an error
+          throw new Error("Something went wrong");
+        }
+      })
+      .then(function(data) {
+        // Check if the data has results
+        if (data.resultados) {
+          // Loop through the results
+          for (var i = 0; i < data.resultados.length; i++) {
+            // Get the result object
+            var result = data.resultados[i];
+            // Create a new div element
+            var div = document.createElement("div");
+            // Set the style of the div
+            div.style.border = "1px solid white";
+            div.style.margin = "10px";
+            div.style.padding = "10px";
+            // Create a new h2 element
+            var h2 = document.createElement("h2");
+            // Set the text content of the h2
+            h2.textContent = result.titulo;
+            // Set the color of the h2
+            h2.style.color = "white";
+            // Append the h2 to the div
+            div.appendChild(h2);
+            // Create a new p element
+            var p = document.createElement("p");
+            // Set the text content of the p
+            p.textContent = result.sumario;
+            // Set the color of the p
+            p.style.color = "white";
+            // Append the p to the div
+            div.appendChild(p);
+            // Create a new a element
+            var a = document.createElement("a");
+            // Set the href attribute of the a
+            a.href = result.url;
+            // Set the text content of the a
+            a.textContent = "Ver más";
+            // Set the color of the a
+            a.style.color = "white";
+            // Append the a to the div
+            div.appendChild(a);
+            // Append the div to the results
+            results.appendChild(div);
+          }
+        } else {
+          // Create a new p element
+          var p = document.createElement("p");
+          // Set the text content of the p
+          p.textContent = "No se han encontrado resultados";
+          // Set the color of the p
+          p.style.color = "white";
+          // Append the p to the results
+          results.appendChild(p);
+        }
+      })
+      .catch(function(error) {
+        // Create a new p element
+        var p = document.createElement("p");
+        // Set the text content of the p
+        p.textContent = error.message;
+        // Set the color of the p
+        p.style.color = "white";
+        // Append the p to the results
+        results.appendChild(p);
+      });
+  }
+});
+
+```
+
+</script>
 </body>
 </html>
