@@ -4,7 +4,7 @@
   <style>
     @import url('https://fonts.googleapis.com/css?family=Nunito');
     body {
-      background-color: white;
+      background-color: turquoise;
       font-family: 'Nunito', sans-serif;
     }
     h1 {
@@ -38,7 +38,7 @@
   </style>
 </head>
 <body>
-  <h1>BOE Finder</h1>
+  <h1>Lex Finder</h1>
   <form id="form">
     <input type="text" id="keyword" placeholder="Introduce la palabra clave para buscar">
     <button type="submit" id="search">Buscar</button>
@@ -64,7 +64,7 @@
         // Encode the query for the URL
         var encodedQuery = encodeURIComponent(query);
         // Construct the URL for the BOE API
-        var url = "https://boe.es/buscar/legislacion.php?accion=Buscar&operador=and&ordenacion=FechaBOE&formato=json&campo%5B0%5D=ID_SRC&dato%5B0%5D=&operador%5B0%5D=and&campo%5B1%5D=NOVIGENTE&operador%5B1%5D=and&campo%5B3%5D=CONSO&operador%5B3%5D=and&campo%5B2%5D=DOC&dato%5B2%5D=" + encodedQuery;
+        var url = "https://boe.es/buscar/legislacion.php?accion=Buscar&operador=and&ordenacion=FechaBOE&formato=json&campo%5B0%5D=DOC&dato%5B0%5D=" + encodedQuery;
         // Fetch the data from the URL
         fetch(url)
           .then(function(response) {
